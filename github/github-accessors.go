@@ -358,12 +358,28 @@ func (a *ActorLocation) GetCountryCode() string {
 	return *a.CountryCode
 }
 
+// GetBody returns the Body field if it's non-nil, zero value otherwise.
+func (a *AddProjectDraftIssueOptions) GetBody() string {
+	if a == nil || a.Body == nil {
+		return ""
+	}
+	return *a.Body
+}
+
 // GetID returns the ID field if it's non-nil, zero value otherwise.
 func (a *AddProjectDraftIssueOptions) GetID() int64 {
 	if a == nil || a.ID == nil {
 		return 0
 	}
 	return *a.ID
+}
+
+// GetTitle returns the Title field if it's non-nil, zero value otherwise.
+func (a *AddProjectDraftIssueOptions) GetTitle() string {
+	if a == nil || a.Title == nil {
+		return ""
+	}
+	return *a.Title
 }
 
 // GetID returns the ID field if it's non-nil, zero value otherwise.

@@ -479,6 +479,17 @@ func TestActorLocation_GetCountryCode(tt *testing.T) {
 	a.GetCountryCode()
 }
 
+func TestAddProjectDraftIssueOptions_GetBody(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue string
+	a := &AddProjectDraftIssueOptions{Body: &zeroValue}
+	a.GetBody()
+	a = &AddProjectDraftIssueOptions{}
+	a.GetBody()
+	a = nil
+	a.GetBody()
+}
+
 func TestAddProjectDraftIssueOptions_GetID(tt *testing.T) {
 	tt.Parallel()
 	var zeroValue int64
@@ -488,6 +499,17 @@ func TestAddProjectDraftIssueOptions_GetID(tt *testing.T) {
 	a.GetID()
 	a = nil
 	a.GetID()
+}
+
+func TestAddProjectDraftIssueOptions_GetTitle(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue string
+	a := &AddProjectDraftIssueOptions{Title: &zeroValue}
+	a.GetTitle()
+	a = &AddProjectDraftIssueOptions{}
+	a.GetTitle()
+	a = nil
+	a.GetTitle()
 }
 
 func TestAddProjectItemOptions_GetID(tt *testing.T) {

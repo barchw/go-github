@@ -525,7 +525,9 @@ type AddProjectItemOptions struct {
 }
 
 type AddProjectDraftIssueOptions struct {
-	ID *int64 `json:"id,omitempty"`
+	ID    *int64  `json:"id,omitempty"`
+	Title *string `json:"title,omitempty"`
+	Body  *string `json:"body,omitempty"`
 }
 
 // UpdateProjectV2Field represents a field update for a project item.
@@ -740,6 +742,11 @@ func (s *ProjectsService) AddUserDraftItem(ctx context.Context, username string,
 		return nil, nil, err
 	}
 	item := new(ProjectV2ItemSimple)
+	item.Content = &ProjectV2ItemContent{DraftIssue: &ProjectV2DraftIssue{}}
+	if opts != nil {
+		item.Content.DraftIssue.Title = opts.Title
+		item.Content.DraftIssue.Body = opts.Body
+	}
 	resp, err := s.client.Do(ctx, req, item)
 	if err != nil {
 		return nil, resp, err
