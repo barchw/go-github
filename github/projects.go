@@ -728,7 +728,12 @@ func (s *ProjectsService) GetUserProjectItem(ctx context.Context, username strin
 //meta:operation POST /user/{user_id}/projectsV2/{project_number}/drafts
 func (s *ProjectsService) AddUserDraftItem(ctx context.Context, username string, projectNumber int, opts *AddProjectDraftIssueOptions) (*ProjectV2ItemSimple, *Response, error) {
 	u := fmt.Sprintf("users/%v/projectsV2/%v/drafts", username, projectNumber)
-	req, err := s.client.NewRequest("POST", u, opts)
+	contentType := ProjectV2ItemContentTypeDraftIssue
+	req, err := s.client.NewRequest("POST", u,
+		&AddProjectItemOptions{
+			ID:   opts.ID,
+			Type: &contentType,
+		})
 	if err != nil {
 		return nil, nil, err
 	}
