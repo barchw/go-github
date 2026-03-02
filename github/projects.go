@@ -723,9 +723,9 @@ func (s *ProjectsService) GetUserProjectItem(ctx context.Context, username strin
 
 // AddUserDraftItem adds a draft item to a user owned project.
 //
-// GitHub API docs: https://docs.github.com/rest/projects/drafts#create-draft-item-for-organization-owned-project
+// GitHub API docs: https://docs.github.com/rest/projects/drafts#create-draft-item-for-user-owned-project
 //
-//meta:operation POST /user/{username}/projectsV2/{project_number}/drafts
+//meta:operation POST /user/{user_id}/projectsV2/{project_number}/drafts
 func (s *ProjectsService) AddUserDraftItem(ctx context.Context, username string, projectNumber int, opts *AddProjectDraftIssueOptions) (*ProjectV2ItemSimple, *Response, error) {
 	u := fmt.Sprintf("users/%v/projectsV2/%v/drafts", username, projectNumber)
 	req, err := s.client.NewRequest("POST", u, opts)

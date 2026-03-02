@@ -479,6 +479,17 @@ func TestActorLocation_GetCountryCode(tt *testing.T) {
 	a.GetCountryCode()
 }
 
+func TestAddProjectDraftIssueOptions_GetID(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue int64
+	a := &AddProjectDraftIssueOptions{ID: &zeroValue}
+	a.GetID()
+	a = &AddProjectDraftIssueOptions{}
+	a.GetID()
+	a = nil
+	a.GetID()
+}
+
 func TestAddProjectItemOptions_GetID(tt *testing.T) {
 	tt.Parallel()
 	var zeroValue int64
@@ -26546,6 +26557,107 @@ func TestProjectV2ItemFieldValue_GetName(tt *testing.T) {
 	p.GetName()
 	p = nil
 	p.GetName()
+}
+
+func TestProjectV2ItemSimple_GetArchivedAt(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue Timestamp
+	p := &ProjectV2ItemSimple{ArchivedAt: &zeroValue}
+	p.GetArchivedAt()
+	p = &ProjectV2ItemSimple{}
+	p.GetArchivedAt()
+	p = nil
+	p.GetArchivedAt()
+}
+
+func TestProjectV2ItemSimple_GetContent(tt *testing.T) {
+	tt.Parallel()
+	p := &ProjectV2ItemSimple{}
+	p.GetContent()
+	p = nil
+	p.GetContent()
+}
+
+func TestProjectV2ItemSimple_GetContentType(tt *testing.T) {
+	tt.Parallel()
+	p := &ProjectV2ItemSimple{}
+	p.GetContentType()
+	p = nil
+	p.GetContentType()
+}
+
+func TestProjectV2ItemSimple_GetCreatedAt(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue Timestamp
+	p := &ProjectV2ItemSimple{CreatedAt: &zeroValue}
+	p.GetCreatedAt()
+	p = &ProjectV2ItemSimple{}
+	p.GetCreatedAt()
+	p = nil
+	p.GetCreatedAt()
+}
+
+func TestProjectV2ItemSimple_GetCreator(tt *testing.T) {
+	tt.Parallel()
+	p := &ProjectV2ItemSimple{}
+	p.GetCreator()
+	p = nil
+	p.GetCreator()
+}
+
+func TestProjectV2ItemSimple_GetID(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue int64
+	p := &ProjectV2ItemSimple{ID: &zeroValue}
+	p.GetID()
+	p = &ProjectV2ItemSimple{}
+	p.GetID()
+	p = nil
+	p.GetID()
+}
+
+func TestProjectV2ItemSimple_GetItemURL(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue string
+	p := &ProjectV2ItemSimple{ItemURL: &zeroValue}
+	p.GetItemURL()
+	p = &ProjectV2ItemSimple{}
+	p.GetItemURL()
+	p = nil
+	p.GetItemURL()
+}
+
+func TestProjectV2ItemSimple_GetNodeID(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue string
+	p := &ProjectV2ItemSimple{NodeID: &zeroValue}
+	p.GetNodeID()
+	p = &ProjectV2ItemSimple{}
+	p.GetNodeID()
+	p = nil
+	p.GetNodeID()
+}
+
+func TestProjectV2ItemSimple_GetProjectURL(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue string
+	p := &ProjectV2ItemSimple{ProjectURL: &zeroValue}
+	p.GetProjectURL()
+	p = &ProjectV2ItemSimple{}
+	p.GetProjectURL()
+	p = nil
+	p.GetProjectURL()
+}
+
+func TestProjectV2ItemSimple_GetUpdatedAt(tt *testing.T) {
+	tt.Parallel()
+	var zeroValue Timestamp
+	p := &ProjectV2ItemSimple{UpdatedAt: &zeroValue}
+	p.GetUpdatedAt()
+	p = &ProjectV2ItemSimple{}
+	p.GetUpdatedAt()
+	p = nil
+	p.GetUpdatedAt()
 }
 
 func TestProjectV2StatusUpdate_GetBody(tt *testing.T) {
