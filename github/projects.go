@@ -235,6 +235,54 @@ func (p *ProjectV2Item) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (p *ProjectV2ItemSimple) UnmarshalJSON(data []byte) error {
+	type contentAlias ProjectV2ItemSimple
+	aux := &struct {
+		Content json.RawMessage `json:"content,omitempty"`
+		*contentAlias
+	}{
+		contentAlias: (*contentAlias)(p),
+	}
+
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+
+	// Now unmarshal the content based on ContentType
+	if len(aux.Content) > 0 && string(aux.Content) != "null" && p.ContentType != nil {
+		p.Content = &ProjectV2ItemContent{}
+		switch *p.ContentType {
+		case ProjectV2ItemContentTypeIssue:
+			p.Content.Issue = &Issue{}
+			return json.Unmarshal(aux.Content, p.Content.Issue)
+		case ProjectV2ItemContentTypePullRequest:
+			p.Content.PullRequest = &PullRequest{}
+			return json.Unmarshal(aux.Content, p.Content.PullRequest)
+		case ProjectV2ItemContentTypeDraftIssue:
+			p.Content.DraftIssue = &ProjectV2DraftIssue{}
+			return json.Unmarshal(aux.Content, p.Content.DraftIssue)
+		}
+	}
+
+	return nil
+}
+
+// ProjectV2ItemSimple represents a simplified project item without field values.
+// This type is used by Post operations that create draft items.
+// The Content field is automatically unmarshaled into the appropriate type based on ContentType.
+type ProjectV2ItemSimple struct {
+	ArchivedAt  *Timestamp                `json:"archived_at,omitempty"`
+	Content     *ProjectV2ItemContent     `json:"content,omitempty"`
+	ContentType *ProjectV2ItemContentType `json:"content_type,omitempty"`
+	CreatedAt   *Timestamp                `json:"created_at,omitempty"`
+	Creator     *User                     `json:"creator,omitempty"`
+	ID          *int64                    `json:"id,omitempty"`
+	ItemURL     *string                   `json:"item_url,omitempty"`
+	NodeID      *string                   `json:"node_id,omitempty"`
+	ProjectURL  *string                   `json:"project_url,omitempty"`
+	UpdatedAt   *Timestamp                `json:"updated_at,omitempty"`
+}
+
 // ProjectV2Field represents a field in a GitHub Projects V2 project.
 // Fields define the structure and data types for project items.
 //
@@ -476,6 +524,10 @@ type AddProjectItemOptions struct {
 	ID   *int64                    `json:"id,omitempty"`
 }
 
+type AddProjectDraftIssueOptions struct {
+	ID *int64 `json:"id,omitempty"`
+}
+
 // UpdateProjectV2Field represents a field update for a project item.
 //
 // GitHub API docs: https://docs.github.com/rest/projects/items#update-project-item-for-organization
@@ -662,6 +714,25 @@ func (s *ProjectsService) GetUserProjectItem(ctx context.Context, username strin
 		return nil, nil, err
 	}
 	item := new(ProjectV2Item)
+	resp, err := s.client.Do(ctx, req, item)
+	if err != nil {
+		return nil, resp, err
+	}
+	return item, resp, nil
+}
+
+// AddUserDraftItem adds a draft item to a user owned project.
+//
+// GitHub API docs: https://docs.github.com/rest/projects/drafts#create-draft-item-for-organization-owned-project
+//
+//meta:operation POST /user/{username}/projectsV2/{project_number}/drafts
+func (s *ProjectsService) AddUserDraftItem(ctx context.Context, username string, projectNumber int, opts *AddProjectDraftIssueOptions) (*ProjectV2ItemSimple, *Response, error) {
+	u := fmt.Sprintf("users/%v/projectsV2/%v/drafts", username, projectNumber)
+	req, err := s.client.NewRequest("POST", u, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	item := new(ProjectV2ItemSimple)
 	resp, err := s.client.Do(ctx, req, item)
 	if err != nil {
 		return nil, resp, err
