@@ -526,6 +526,7 @@ type AddProjectItemOptions struct {
 
 type AddProjectDraftIssueOptions struct {
 	ID    *int64  `json:"id,omitempty"`
+	Type  *string `json:"type,omitempty"`
 	Title *string `json:"title,omitempty"`
 	Body  *string `json:"body,omitempty"`
 }
@@ -730,23 +731,11 @@ func (s *ProjectsService) GetUserProjectItem(ctx context.Context, username strin
 //meta:operation POST /user/{user_id}/projectsV2/{project_number}/drafts
 func (s *ProjectsService) AddUserDraftItem(ctx context.Context, username string, projectNumber int, opts *AddProjectDraftIssueOptions) (*ProjectV2ItemSimple, *Response, error) {
 	u := fmt.Sprintf("users/%v/projectsV2/%v/drafts", username, projectNumber)
-	contentType := ProjectV2ItemContentTypeDraftIssue
-	projectItemOptions := &AddProjectItemOptions{
-		Type: &contentType,
-	}
-	if opts != nil {
-		projectItemOptions.ID = opts.ID
-	}
-	req, err := s.client.NewRequest("POST", u, projectItemOptions)
+	req, err := s.client.NewRequest("POST", u, opts)
 	if err != nil {
 		return nil, nil, err
 	}
 	item := new(ProjectV2ItemSimple)
-	item.Content = &ProjectV2ItemContent{DraftIssue: &ProjectV2DraftIssue{}}
-	if opts != nil {
-		item.Content.DraftIssue.Title = opts.Title
-		item.Content.DraftIssue.Body = opts.Body
-	}
 	resp, err := s.client.Do(ctx, req, item)
 	if err != nil {
 		return nil, resp, err
